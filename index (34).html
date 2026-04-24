@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediAgenda · Dra. Nora María Oviedo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080C18;--bg2:#0F1628;--bg3:#162040;
+  --gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#8B6914;
+  --cream:#F5F0E8;--green:#2ECC71;--red:#E74C3C;--purple:#9B59B6;--blue:#4A8FD4;
+  --text:#E8EAF0;--muted:#8892AA;--border:rgba(201,168,76,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:3px}
+.view{display:none;min-height:100vh}
+.view.active{display:block;animation:fi .35s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,12,24,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--gold);cursor:pointer}
+.logo span{color:var(--cream);font-weight:300}
+.nav-r{display:flex;gap:8px}
+.nb{padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;border:none}
+.nb-g{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.nb-g:hover{color:var(--gold);border-color:var(--gold)}
+.nb-gold{background:var(--gold);color:#080C18;font-weight:600}
+.nb-gold:hover{background:var(--gold-l)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:70px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(74,143,212,.07),transparent 60%),radial-gradient(ellipse at 75% 25%,rgba(201,168,76,.05),transparent 50%)}
+.hero-in{text-align:center;max-width:720px;padding:0 20px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:.78rem;color:var(--gold);margin-bottom:28px}
+.badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.6rem);line-height:1.1;color:var(--cream);margin-bottom:16px}
+h1 em{color:var(--gold);font-style:normal}
+.sub{color:var(--muted);font-size:1rem;max-width:500px;margin:0 auto 32px;line-height:1.7}
+.hctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta{padding:13px 28px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s;border:none;font-family:'DM Sans',sans-serif}
+.cta-p{background:var(--gold);color:#080C18}
+.cta-p:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,168,76,.3)}
+.cta-s{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
+.cta-s:hover{border-color:var(--gold);color:var(--gold)}
+/* cards */
+.features{padding:80px 24px;max-width:960px;margin:0 auto}
+.sl{text-align:center;color:var(--gold);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+.st{text-align:center;font-family:'Playfair Display',serif;font-size:2rem;color:var(--cream);margin-bottom:44px}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.fc{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all .3s}
+.fc:hover{border-color:var(--gold);transform:translateY(-3px)}
+.fi{width:42px;height:42px;border-radius:10px;background:rgba(201,168,76,.1);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:12px}
+.fc h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--cream);margin-bottom:6px}
+.fc p{color:var(--muted);font-size:.85rem;line-height:1.6}
+
+/* CHAT */
+#view-chat{padding-top:70px}
+.chat-wrap{max-width:720px;margin:0 auto;padding:20px 16px;height:calc(100vh - 70px);display:flex;flex-direction:column}
+.chat-hdr{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:14px 14px 0 0;border-bottom:none}
+.v-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;flex-shrink:0}
+.v-av::after{content:'';position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg2)}
+.v-inf h3{font-family:'Playfair Display',serif;font-size:.98rem;color:var(--cream)}
+.v-inf small{font-size:.76rem;color:var(--green)}
+.qr{display:flex;gap:7px;flex-wrap:wrap;padding:10px 18px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-bottom:none}
+.qb{padding:5px 12px;background:transparent;border:1px solid var(--border);border-radius:100px;color:var(--gold);font-size:.77rem;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.qb:hover{background:rgba(201,168,76,.1);border-color:var(--gold)}
+.chat-msgs{flex:1;overflow-y:auto;padding:18px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-bottom:none;display:flex;flex-direction:column;gap:13px}
+.msg{display:flex;gap:9px;max-width:88%;animation:mi .3s ease}
+@keyframes mi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.m-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:.78rem;flex-shrink:0}
+.m-bb{padding:10px 14px;border-radius:10px;font-size:.88rem;line-height:1.6}
+.msg.bot .m-bb{background:var(--bg3);color:var(--text);border-radius:4px 10px 10px 10px}
+.msg.user .m-bb{background:var(--gold);color:#080C18;border-radius:10px 4px 10px 10px;font-weight:500}
+.typing-bbl{display:flex;gap:4px;padding:10px 14px;background:var(--bg3);border-radius:4px 10px 10px 10px}
+.typing-bbl span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bo .9s infinite}
+.typing-bbl span:nth-child(2){animation-delay:.15s}.typing-bbl span:nth-child(3){animation-delay:.3s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.chat-in-a{display:flex;gap:8px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px}
+.cin{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 14px;color:var(--text);font-size:.88rem;font-family:'DM Sans',sans-serif;resize:none;height:44px;transition:border-color .2s}
+.cin:focus{outline:none;border-color:var(--gold)}
+.cin::placeholder{color:var(--muted)}
+.sbtn{width:44px;height:44px;background:var(--gold);border:none;border-radius:9px;cursor:pointer;font-size:1rem;transition:all .2s;flex-shrink:0}
+.sbtn:hover{background:var(--gold-l)}
+
+/* CONFIRM */
+#view-confirm{padding-top:70px}
+.conf-wrap{max-width:540px;margin:0 auto;padding:50px 20px;text-align:center}
+.conf-icon{width:74px;height:74px;border-radius:50%;background:rgba(46,204,113,.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin:0 auto 20px}
+.conf-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;margin:24px 0;text-align:left}
+.crow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.crow:last-child{border-bottom:none;font-weight:700;color:var(--gold)}
+.crow span:first-child{color:var(--muted)}
+.wbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.92rem;margin-bottom:10px;transition:all .2s}
+.wbtn:hover{background:#20c05c}
+.bkbtn{width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.bkbtn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ADMIN */
+#view-admin{padding-top:70px}
+.adm-wrap{max-width:980px;margin:0 auto;padding:26px 18px}
+.adm-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.adm-ttl{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--cream)}
+.adm-sub{color:var(--muted);font-size:.82rem;margin-top:3px}
+.atabs{display:flex;gap:7px;margin-bottom:24px;flex-wrap:wrap}
+.at{padding:8px 18px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;transition:all .2s}
+.at.on{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold);font-weight:600}
+.at:hover:not(.on){color:var(--text)}
+.tc{display:none}.tc.on{display:block;animation:fi .3s ease}
+/* stats */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.sn{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold);font-weight:700}
+.sl2{font-size:.76rem;color:var(--muted);margin-top:3px}
+/* week */
+.wtool{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.cnb{padding:7px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;font-size:.85rem}
+.cnb:hover{border-color:var(--gold);color:var(--gold)}
+.wlbl{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream)}
+.wgrid{display:grid;grid-template-columns:55px repeat(5,1fr);gap:1px;background:var(--border);border-radius:12px;overflow:hidden}
+.wgh{background:var(--bg3);padding:9px 6px;text-align:center}
+.wgh .dn{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.wgh .dd{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);margin-top:2px}
+.wgh.tod .dd{color:var(--gold)}
+.wgt{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);text-align:right;padding:7px 6px;background:var(--bg3)}
+.wgc{background:var(--bg2);min-height:42px;position:relative;cursor:pointer;transition:background .15s}
+.wgc:hover{background:rgba(201,168,76,.04)}
+.wgc.avail{background:rgba(46,204,113,.05)}
+.slot-a{position:absolute;inset:2px;background:linear-gradient(135deg,rgba(155,89,182,.25),rgba(74,143,212,.25));border:1px solid rgba(155,89,182,.5);border-radius:5px;padding:3px 6px;font-size:.7rem;line-height:1.3;cursor:pointer}
+.slot-a:hover{transform:scale(1.02)}
+.slot-a .pn{font-weight:600;color:var(--cream)}
+.slot-a .pt{color:var(--muted)}
+/* appts list */
+.al{display:flex;flex-direction:column;gap:9px}
+.ar{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;transition:all .2s}
+.ar:hover{border-color:rgba(201,168,76,.3)}
+.atime{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--gold);min-width:52px}
+.adate{font-size:.75rem;color:var(--muted)}
+.ainf{flex:1}
+.aname{font-weight:600;font-size:.9rem;color:var(--cream)}
+.adet{font-size:.76rem;color:var(--muted);margin-top:2px}
+.tag{padding:3px 9px;border-radius:100px;font-size:.7rem;font-weight:600}
+.tok{background:rgba(46,204,113,.15);color:var(--green)}
+.abtn{padding:5px 10px;border-radius:7px;font-size:.73rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;background:rgba(231,76,60,.1);color:var(--red);transition:all .2s}
+.abtn:hover{background:rgba(231,76,60,.2)}
+.act-btn{padding:5px 10px;border-radius:7px;font-size:.82rem;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.act-wsp{background:rgba(37,211,102,.1);color:#25D366}
+.act-wsp:hover{background:rgba(37,211,102,.2)}
+/* sched */
+.sdg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin-bottom:20px}
+.dt{padding:13px 10px;background:var(--bg2);border:2px solid var(--border);border-radius:11px;cursor:pointer;text-align:center;transition:all .2s}
+.dt.on{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.dn2{font-weight:600;font-size:.88rem;color:var(--cream);margin-bottom:3px}
+.dh{font-size:.75rem;color:var(--muted)}
+.dt.on .dh{color:var(--gold)}
+.tconf{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:18px;margin-bottom:18px}
+.tcr{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.tcr:last-child{border-bottom:none}
+.tcl{min-width:150px;font-size:.86rem;color:var(--muted)}
+.tci{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.86rem}
+.tci:focus{outline:none;border-color:var(--gold)}
+/* profile */
+.pf{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:26px}
+.fg2{margin-bottom:16px}
+.fl{display:block;font-size:.81rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+.fi2{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 13px;color:var(--text);font-size:.88rem;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.fi2:focus{outline:none;border-color:var(--gold)}
+.fi2::placeholder{color:var(--muted)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bc{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:15px;margin-top:10px}
+.bcr{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.86rem}
+.bcr:last-child{border-bottom:none}
+.bcl{color:var(--muted)}.bcv{color:var(--cream);font-weight:500}
+/* wsp */
+.wb{background:var(--bg3);border:1px dashed var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.wb p{color:var(--muted);font-size:.84rem;margin-bottom:14px;line-height:1.6}
+.wbtn2{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:9px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;transition:all .2s}
+.wbtn2:hover{background:#20c05c}
+/* modal */
+.ovl{position:fixed;inset:0;background:rgba(8,12,24,.92);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.ovl.show{display:flex}
+.mdl{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:400px;width:100%;animation:fi .3s ease}
+.mdl h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--cream);margin-bottom:6px}
+.mdl p{color:var(--muted);font-size:.86rem;margin-bottom:20px}
+.mbtn{width:100%;padding:12px;background:var(--gold);color:#080C18;border:none;border-radius:9px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:all .2s}
+.mbtn:hover{background:var(--gold-l)}
+.mbtn.back{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.mbtn.back:hover{border-color:var(--gold);color:var(--gold)}
+.toast{position:fixed;bottom:20px;right:20px;padding:11px 16px;border-radius:9px;font-size:.86rem;z-index:300;display:none;animation:fi .3s;border:1px solid}
+.tok2{background:var(--bg2);border-color:var(--green);color:var(--green)}
+.terr{background:var(--bg2);border-color:var(--red);color:var(--red)}
+@media(max-width:600px){.sg,.fr{grid-template-columns:1fr 1fr}.wgrid{grid-template-columns:38px repeat(5,1fr)}.nav-r .nb-g{display:none}}
+
+/* PACIENTES */
+.pac-card{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:11px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.pac-card:hover{border-color:var(--gold);transform:translateX(3px)}
+.pac-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.pac-inf{flex:1}
+.pac-name{font-weight:600;font-size:.9rem;color:var(--cream)}
+.pac-det{font-size:.76rem;color:var(--muted);margin-top:2px}
+.pac-badge{padding:3px 9px;border-radius:100px;font-size:.7rem;font-weight:600;background:rgba(201,168,76,.12);color:var(--gold)}
+.ficha-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:.88rem}
+.ficha-row:last-child{border-bottom:none}
+.ficha-row span:first-child{color:var(--muted)}
+.ficha-row span:last-child{color:var(--cream);font-weight:500}
+.hist-item{background:var(--bg3);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:.84rem}
+.hist-date{color:var(--gold);font-weight:600;margin-bottom:3px}
+.hist-det{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="sv('home')">Medi<span>Agenda</span></div>
+  <div class="nav-r">
+    <button class="nb nb-g" onclick="sv('home')">Inicio</button>
+    <button class="nb nb-g" onclick="sv('chat')">💬 Valentina</button>
+    <button class="nb nb-g" onclick="openLogin()">🔐 Admin</button>
+    <button class="nb nb-gold" onclick="sv('chat')">Reservar Sesión</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="view-home" class="view active">
+  <div class="hero">
+    <div class="hero-in">
+      <div class="badge">🟢 Valentina disponible 24/7</div>
+      <h1>Psicología Clínica<br><em>Dra. Nora María Oviedo</em></h1>
+      <p class="sub">Valentina, nuestra secretaria inteligente, te atiende en cualquier momento y agenda tu sesión paso a paso.</p>
+      <div class="hctas">
+        <button class="cta cta-p" onclick="sv('chat')">💬 Hablar con Valentina</button>
+        <button class="cta cta-s" onclick="openLogin()">Panel Médico →</button>
+      </div>
+    </div>
+  </div>
+  <section class="features">
+    <div class="sl">Sistema completo</div>
+    <div class="st">Todo en un solo lugar</div>
+    <div class="fg">
+      <div class="fc"><div class="fi">🤖</div><h3>Valentina IA</h3><p>Atiende pacientes, recopila datos y agenda sesiones automáticamente, sin que la doctora intervenga.</p></div>
+      <div class="fc"><div class="fi">📅</div><h3>Agenda Visual</h3><p>Vista semanal con todas las citas. La doctora ve su día completo de un vistazo.</p></div>
+      <div class="fc"><div class="fi">💳</div><h3>Pagos Simples</h3><p>Solo efectivo o transferencia bancaria. Valentina informa los datos al paciente automáticamente.</p></div>
+      <div class="fc"><div class="fi">📱</div><h3>WhatsApp</h3><p>Resumen de la agenda del día siguiente directo al WhatsApp de la doctora.</p></div>
+      <div class="fc"><div class="fi">⚙️</div><h3>Panel Admin</h3><p>Configura horarios, gestiona citas y actualiza datos. Acceso con contraseña privada.</p></div>
+      <div class="fc"><div class="fi">📋</div><h3>Historial</h3><p>Todas las citas guardadas con datos completos del paciente: RUT, teléfono, motivo.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- CHAT VALENTINA -->
+<div id="view-chat" class="view">
+  <div class="chat-wrap">
+    <div class="chat-hdr">
+      <div class="v-av">👩‍⚕️</div>
+      <div class="v-inf">
+        <h3>Valentina</h3>
+        <small>● Secretaria de Dra. Nora María Oviedo · En línea</small>
+      </div>
+    </div>
+    <div class="qr" id="qr-bar">
+      <button class="qb" onclick="qr('Quiero reservar una sesión')">📅 Reservar sesión</button>
+      <button class="qb" onclick="qr('¿Cuáles son los horarios?')">🕐 Horarios</button>
+      <button class="qb" onclick="qr('¿Cuánto cuesta la sesión?')">💰 Precios</button>
+      <button class="qb" onclick="qr('¿Cómo puedo pagar?')">💳 Formas de pago</button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-in-a">
+      <textarea class="cin" id="cin" placeholder="Escribe tu mensaje..." rows="1" onkeydown="ckd(event)"></textarea>
+      <button class="sbtn" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMACIÓN -->
+<div id="view-confirm" class="view">
+  <div class="conf-wrap">
+    <div class="conf-icon">✅</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--cream);margin-bottom:6px">¡Sesión Confirmada!</h2>
+    <p style="color:var(--muted)">Tu reserva ha sido registrada exitosamente</p>
+    <div class="conf-card" id="conf-det"></div>
+    <button class="wbtn" id="wbtn-pac">📱 Enviar confirmación por WhatsApp</button>
+    <button class="bkbtn" onclick="sv('home')">← Volver al inicio</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="view-admin" class="view">
+  <div class="adm-wrap">
+    <div class="adm-hdr">
+      <div>
+        <div class="adm-ttl">Panel de Administración</div>
+        <div class="adm-sub" id="adm-sub"></div>
+      </div>
+      <div style="display:flex;gap:7px">
+        <button class="nb nb-g" onclick="refreshAdm()">🔄</button>
+        <button class="nb nb-g" onclick="sv('home')">← Salir</button>
+      </div>
+    </div>
+    <div class="atabs">
+      <button class="at on" onclick="stab('t-agenda',this)">📅 Agenda</button>
+      <button class="at" onclick="stab('t-citas',this)">📋 Citas</button>
+      <button class="at" onclick="stab('t-hor',this)">⚙️ Horarios</button>
+      <button class="at" onclick="stab('t-perfil',this)">👩‍⚕️ Perfil</button>
+      <button class="at" onclick="stab('t-wsp',this)">📱 WhatsApp</button>
+      <button class="at" onclick="stab('t-pac',this)">👥 Pacientes</button>
+    </div>
+
+    <!-- AGENDA -->
+    <div id="t-agenda" class="tc on">
+      <div class="sg" id="adm-stats"></div>
+      <div class="wtool">
+        <button class="cnb" onclick="wkNav(-1)">‹ Anterior</button>
+        <div class="wlbl" id="wk-lbl"></div>
+        <button class="cnb" onclick="wkNav(1)">Siguiente ›</button>
+        <button class="cnb" onclick="wkNav(0)" style="margin-left:auto">Hoy</button>
+      </div>
+      <div id="wgrid"></div>
+    </div>
+
+    <!-- CITAS -->
+    <div id="t-citas" class="tc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream)">Listado de citas</div>
+        <div style="display:flex;gap:7px">
+          <button class="cnb" onclick="filt('all')">Todas</button>
+          <button class="cnb" onclick="filt('today')">Hoy</button>
+          <button class="cnb" onclick="filt('upcoming')">Próximas</button>
+        </div>
+      </div>
+      <div class="al" id="appts-list"></div>
+    </div>
+
+    <!-- HORARIOS -->
+    <div id="t-hor" class="tc">
+      <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);margin-bottom:14px">Días de atención</div>
+      <div class="sdg" id="sched-days"></div>
+      <div class="tconf">
+        <div class="tcr"><span class="tcl">Hora inicio</span><input type="time" class="tci" id="c-start" value="09:00" onchange="saveHor()"></div>
+        <div class="tcr"><span class="tcl">Hora término</span><input type="time" class="tci" id="c-end" value="18:00" onchange="saveHor()"></div>
+        <div class="tcr"><span class="tcl">Duración sesión</span>
+          <select class="tci" id="c-slot" onchange="saveHor()">
+            <option value="50">50 min (estándar psicología)</option>
+            <option value="60">60 minutos</option>
+            <option value="45">45 minutos</option>
+            <option value="30">30 minutos</option>
+          </select>
+        </div>
+        <div class="tcr"><span class="tcl">Pausa entre sesiones</span>
+          <select class="tci" id="c-break" onchange="saveHor()">
+            <option value="10">10 minutos</option>
+            <option value="15">15 minutos</option>
+            <option value="0">Sin pausa</option>
+          </select>
+        </div>
+      </div>
+      <button class="wbtn2" onclick="toast('Horarios guardados ✅','tok2')">💾 Guardar horarios</button>
+    </div>
+
+    <!-- PERFIL -->
+    <div id="t-perfil" class="tc">
+      <div class="pf">
+        <div class="fr">
+          <div class="fg2"><label class="fl">Nombre completo</label><input class="fi2" value="Dra. Nora María Oviedo"></div>
+          <div class="fg2"><label class="fl">Especialidad</label><input class="fi2" value="Psicóloga Clínica · Salud Mental"></div>
+        </div>
+        <div class="fr">
+          <div class="fg2"><label class="fl">WhatsApp (con código país)</label><input class="fi2" id="prf-wsp" placeholder="+56 9 XXXX XXXX"></div>
+          <div class="fg2"><label class="fl">Email</label><input class="fi2" placeholder="nora.oviedo@gmail.com"></div>
+        </div>
+        <div class="fg2"><label class="fl">Dirección de la consulta</label><input class="fi2" id="prf-addr" placeholder="Ej: Av. Providencia 1234, Of. 302, Santiago"></div>
+        <div class="fg2" style="margin-top:18px">
+          <label class="fl">💳 Datos bancarios (para transferencias)</label>
+          <div class="bc">
+            <div class="bcr"><span class="bcl">Banco</span><span class="bcv">Banco Estado</span></div>
+            <div class="bcr"><span class="bcl">Tipo de cuenta</span><span class="bcv">Cuenta RUT</span></div>
+            <div class="bcr"><span class="bcl">Número</span><span class="bcv">8432861-8</span></div>
+            <div class="bcr"><span class="bcl">Titular</span><span class="bcv">Nora María Oviedo</span></div>
+          </div>
+        </div>
+        <button class="wbtn2" style="margin-top:18px" onclick="savePerfil()">💾 Guardar perfil</button>
+      </div>
+    </div>
+
+    <!-- WHATSAPP -->
+    <div id="t-wsp" class="tc">
+      <div class="wb">
+        <p>📅 Envía el resumen de la agenda de <strong>mañana</strong> a tu WhatsApp con los datos completos de cada paciente.</p>
+        <button class="wbtn2" id="wsp-tmr">📲 Agenda de mañana</button>
+      </div>
+      <div class="wb">
+        <p>📋 Envía el resumen de <strong>todas las citas próximas</strong> pendientes a tu WhatsApp.</p>
+        <button class="wbtn2" id="wsp-all">📲 Todas las citas próximas</button>
+      </div>
+      <div class="wb">
+        <p>📨 Envía un <strong>recordatorio individual por WhatsApp</strong> a cada paciente de mañana, uno a uno.</p>
+        <button class="wbtn2" id="wsp-recordatorios" style="background:#1a7e4a">📨 Recordatorios a pacientes de mañana</button>
+      </div>
+    </div>
+
+    <!-- PACIENTES -->
+    <div id="t-pac" class="tc">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream)">Registro de Pacientes</div>
+        <button class="cnb" style="border-color:var(--gold);color:var(--gold)" onclick="openNuevoPac()">+ Nueva Cita Manual</button>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.85rem;color:var(--muted)">
+        💡 Los pacientes que reservan con Valentina se agregan automáticamente. Usa <b style="color:var(--gold)">"Nueva Cita Manual"</b> para pacientes que llaman por teléfono.
+      </div>
+      <div style="margin-bottom:12px">
+        <input class="fi2" id="pac-search" placeholder="🔍 Buscar por nombre, RUT o teléfono..." oninput="buscarPac(this.value)" style="width:100%">
+      </div>
+      <div id="pac-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVA CITA MANUAL -->
+<div class="ovl" id="ovl-nuevapac">
+  <div class="mdl" style="max-width:520px">
+    <h3>📋 Nueva Cita Manual</h3>
+    <p>Para pacientes que llaman por teléfono o que la doctora agenda directamente</p>
+    <div class="fr">
+      <div class="fg2"><label class="fl">Nombre *</label><input class="fi2" id="np-nombre" placeholder="Juan"></div>
+      <div class="fg2"><label class="fl">Apellido *</label><input class="fi2" id="np-apellido" placeholder="Pérez"></div>
+    </div>
+    <div class="fr">
+      <div class="fg2"><label class="fl">RUT *</label><input class="fi2" id="np-rut" placeholder="12.345.678-9"></div>
+      <div class="fg2"><label class="fl">Teléfono / WhatsApp *</label><input class="fi2" id="np-tel" placeholder="+56 9 1234 5678"></div>
+    </div>
+    <div class="fg2"><label class="fl">Email</label><input class="fi2" id="np-email" placeholder="correo@email.com"></div>
+    <div class="fg2"><label class="fl">Motivo de consulta</label><input class="fi2" id="np-motivo" placeholder="Describe brevemente..."></div>
+    <div class="fr">
+      <div class="fg2">
+        <label class="fl">Tipo de sesión *</label>
+        <select class="fi2" id="np-servicio">
+          <option value="0">🧠 Primera Consulta — $60.000</option>
+          <option value="1">💬 Sesión de Psicoterapia — $60.000</option>
+          <option value="2">📋 Control y Seguimiento — $51.000</option>
+          <option value="3">📝 Evaluación Psicológica — $96.000</option>
+        </select>
+      </div>
+      <div class="fg2">
+        <label class="fl">Forma de pago *</label>
+        <select class="fi2" id="np-pago">
+          <option value="Transferencia bancaria">🏦 Transferencia bancaria</option>
+          <option value="Efectivo en consulta">💵 Efectivo en consulta</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg2"><label class="fl">Fecha *</label><input type="date" class="fi2" id="np-fecha"></div>
+      <div class="fg2">
+        <label class="fl">Hora *</label>
+        <select class="fi2" id="np-hora"></select>
+      </div>
+    </div>
+    <button class="mbtn" onclick="guardarNuevaCita()">✅ Guardar Cita</button>
+    <button class="mbtn back" onclick="closeOvl('ovl-nuevapac')">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL FICHA PACIENTE -->
+<div class="ovl" id="ovl-ficha">
+  <div class="mdl" style="max-width:520px">
+    <h3 id="ficha-nombre"></h3>
+    <div id="ficha-content"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="wbtn2" id="ficha-wsp" style="flex:1">📱 WhatsApp</button>
+      <button class="mbtn back" onclick="closeOvl('ovl-ficha')" style="flex:1;margin-top:0">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOGIN -->
+<div class="ovl" id="ovl-login">
+  <div class="mdl">
+    <h3>🔐 Acceso Médico</h3>
+    <p>Panel exclusivo · Dra. Nora María Oviedo</p>
+    <div class="fg2">
+      <label class="fl">Contraseña</label>
+      <input type="password" class="fi2" id="adm-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')chkAdm()">
+    </div>
+    <button class="mbtn" onclick="chkAdm()">Ingresar</button>
+    <button class="mbtn back" onclick="closeOvl('ovl-login')">Cancelar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script>
+// ═══════════════ CONFIG ═══════════════
+const CFG = {
+  doctor:"Dra. Nora María Oviedo",
+  specialty:"Psicóloga Clínica · Salud Mental",
+  wsp:"56900000000", // ← CAMBIAR por número real con código país sin +
+  adminPwd:"nora2025",
+  bank:{ banco:"Banco Estado", tipo:"Cuenta RUT", num:"8432861-8", titular:"Nora María Oviedo" },
+  startH:9, endH:18, slotMin:50, breakMin:10,
+  workDays:[1,2,3,4,5],
+  services:[
+    { id:"primera", icon:"🧠", name:"Primera Consulta",      dur:60, price:60000 },
+    { id:"terapia", icon:"💬", name:"Sesión de Psicoterapia", dur:50, price:60000 },
+    { id:"control", icon:"📋", name:"Control y Seguimiento",  dur:45, price:51000 },
+    { id:"eval",    icon:"📝", name:"Evaluación Psicológica", dur:90, price:96000 },
+  ],
+};
+
+// ═══════════════ STORAGE ═══════════════
+const LA = ()=> JSON.parse(localStorage.getItem('ma_appts')||'[]');
+const SA = (a)=> localStorage.setItem('ma_appts',JSON.stringify(a));
+
+// ═══════════════ UI HELPERS ═══════════════
+function sv(n){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+n).classList.add('active');
+  if(n==='chat') initChat();
+  if(n==='admin') initAdm();
+  window.scrollTo(0,0);
+}
+function openLogin(){ document.getElementById('ovl-login').classList.add('show'); setTimeout(()=>document.getElementById('adm-pwd').focus(),100) }
+function closeOvl(id){ document.getElementById(id).classList.remove('show') }
+function chkAdm(){
+  if(document.getElementById('adm-pwd').value===CFG.adminPwd){
+    closeOvl('ovl-login'); document.getElementById('adm-pwd').value=''; sv('admin');
+  } else { toast('Contraseña incorrecta','terr'); document.getElementById('adm-pwd').value='' }
+}
+function toast(msg,cls='tok2'){
+  const el=document.getElementById('toast-el');
+  el.textContent=msg; el.className='toast '+cls; el.style.display='block';
+  setTimeout(()=>el.style.display='none',3200);
+}
+function fmt(n){ return '$'+n.toLocaleString('es-CL') }
+function fmtD(ds){
+  if(!ds)return'';
+  return new Date(ds+'T12:00:00').toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function fmtDs(ds){
+  if(!ds)return'';
+  return new Date(ds+'T12:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'short'});
+}
+function stab(id,el){
+  document.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.at').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+  if(id==='t-citas') renderAppts('upcoming');
+  if(id==='t-agenda') renderWk();
+  if(id==='t-wsp') setupWsp();
+  if(id==='t-pac') renderPacientes();
+}
+
+// ═══════════════ VALENTINA CHAT ═══════════════
+let chatInit=false;
+let BF={ active:false, step:'', data:{}, service:null, date:null, time:null, pago:null };
+
+function initChat(){
+  if(chatInit)return; chatInit=true;
+  addBot(`¡Hola! 💛 Soy **Valentina**, la secretaria virtual de **${CFG.doctor}**.\n\nPuedo ayudarte a:\n📅 Reservar tu sesión de psicología\n💬 Responder tus preguntas\n💳 Informarte sobre precios y formas de pago\n\n¿En qué te puedo ayudar hoy?`);
+}
+
+function addBot(txt){
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div'); d.className='msg bot';
+  d.innerHTML=`<div class="m-av">👩‍⚕️</div><div class="m-bb">${fmtT(txt)}</div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
+}
+function addUser(txt){
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div'); d.className='msg user';
+  d.innerHTML=`<div class="m-bb">${txt}</div><div class="m-av">👤</div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
+}
+function showTyp(){
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div'); d.className='msg bot'; d.id='typ';
+  d.innerHTML=`<div class="m-av">👩‍⚕️</div><div class="typing-bbl"><span></span><span></span><span></span></div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
+}
+function rmTyp(){ const t=document.getElementById('typ'); if(t)t.remove() }
+function fmtT(t){
+  return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g,'<em>$1</em>')
+          .replace(/\n/g,'<br>');
+}
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)) }
+
+async function sendMsg(){
+  const inp=document.getElementById('cin');
+  const txt=inp.value.trim(); if(!txt)return;
+  inp.value=''; addUser(txt);
+  showTyp(); await delay(600); rmTyp();
+  if(BF.active){ handleFlow(txt); return }
+  // Respuesta inteligente sin API
+  const r=getReply(txt);
+  addBot(r);
+  if(r.includes('¿Me dices tu nombre') || txt.toLowerCase().match(/reserv|agendar|quiero hora|sesión|cita/)){
+    if(!BF.active){ await delay(500); startFlow() }
+  }
+}
+
+function getReply(txt){
+  const t=txt.toLowerCase();
+  if(t.match(/hola|buenos|buenas|saludos|hi\b/)) return `¡Hola! 😊 ¿En qué te puedo ayudar hoy?\n\nPuedes preguntarme sobre **precios**, **horarios**, **formas de pago** o simplemente decirme que quieres **reservar una sesión**.`;
+  if(t.match(/precio|cuánto|costo|valor|cobr/)) return `Nuestros servicios y precios:\n\n${CFG.services.map((s,i)=>`**${i+1}.** ${s.icon} ${s.name}\n   ${fmt(s.price)} · ${s.dur} minutos`).join('\n\n')}\n\n¿Deseas reservar una sesión?`;
+  if(t.match(/horario|cuándo|días|atiend/)) return `Atendemos de **Lunes a Viernes** ⏰\nDe **09:00 a 18:00 hrs**\n\nNo atendemos fines de semana ni festivos.\n\n¿Te gustaría reservar una hora?`;
+  if(t.match(/pago|transferencia|efectivo|cómo pag/)) return `Aceptamos dos formas de pago:\n\n🏦 **Transferencia bancaria**\nBanco Estado · Cuenta RUT **8432861-8**\nTitular: Nora María Oviedo\n\n💵 **Efectivo** el día de la sesión\n\n¿Necesitas reservar una sesión?`;
+  if(t.match(/reserv|agendar|quiero hora|necesito hora|cita/)) return `¡Con gusto te ayudo a reservar! 📅\n¿Me dices tu **nombre completo** para comenzar?`;
+  if(t.match(/cancelar|anular/)) return `Para cancelar o reagendar tu sesión, por favor comunícate directamente con la Dra. Oviedo a su WhatsApp. ¿Puedo ayudarte en algo más?`;
+  if(t.match(/gracias|thank/)) return `¡Con mucho gusto! 💛 Estoy aquí para lo que necesites.`;
+  if(t.match(/psicolog|terapia|ayuda|depresion|ansiedad|estrés|triste/)) return `La Dra. Nora María Oviedo puede ayudarte 💛\n\nEspecializada en ansiedad, depresión, estrés, crisis vitales y terapia individual.\n\n¿Te gustaría reservar una primera consulta?`;
+  return `Entiendo 😊 Si necesitas **reservar una sesión**, conocer **precios** u **horarios**, con gusto te ayudo. ¿En qué te puedo orientar?`;
+}
+
+function qr(txt){ document.getElementById('cin').value=txt; sendMsg() }
+function ckd(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()} }
+
+// ═══════════════ FLUJO DE RESERVA ═══════════════
+function startFlow(){
+  BF={ active:true, step:'nombre', data:{}, service:null, date:null, time:null, pago:null };
+  addBot(`Perfecto, voy a registrar tu sesión 📝\n\n¿Cuál es tu **nombre completo**?`);
+}
+
+function handleFlow(txt){
+  switch(BF.step){
+    case 'nombre':
+      BF.data.nombre=txt; BF.step='rut';
+      addBot(`Gracias **${txt}** 😊\n\n¿Cuál es tu **RUT**? (ej: 12.345.678-9)`);
+      break;
+    case 'rut':
+      BF.data.rut=txt; BF.step='telefono';
+      addBot(`¿Cuál es tu **número de WhatsApp** o teléfono de contacto?`);
+      break;
+    case 'telefono':
+      BF.data.telefono=txt; BF.step='email';
+      addBot(`¿Cuál es tu **correo electrónico**?`);
+      break;
+    case 'email':
+      BF.data.email=txt; BF.step='motivo';
+      addBot(`¿Cuál es el **motivo de consulta**? (puedes ser breve, es confidencial 🔒)`);
+      break;
+    case 'motivo':
+      BF.data.motivo=txt; BF.step='servicio';
+      const svcs=CFG.services.map((s,i)=>`**${i+1}.** ${s.icon} ${s.name} — ${fmt(s.price)} (${s.dur} min)`).join('\n');
+      addBot(`¿Qué tipo de sesión necesitas?\n\n${svcs}\n\nResponde con el número **1, 2, 3 o 4**`);
+      break;
+    case 'servicio':
+      const idx=parseInt(txt)-1;
+      if(isNaN(idx)||idx<0||idx>=CFG.services.length){ addBot('Por favor responde con un número del **1 al 4** 🙏'); return }
+      BF.service=CFG.services[idx]; BF.step='fecha';
+      addBot(`**${BF.service.name}** seleccionada ✅\n\nAhora elige la fecha:`);
+      setTimeout(()=>askDate(),400);
+      break;
+    case 'fecha':
+      handleDate(txt); break;
+    case 'hora':
+      handleTime(txt); break;
+    case 'pago':
+      handlePago(txt); break;
+    case 'confirmar':
+      handleConfirm(txt); break;
+  }
+}
+
+function askDate(){
+  const today=new Date();
+  const opts=[]; let d=new Date(today); d.setDate(d.getDate()+1); let c=0;
+  while(c<5){
+    if(CFG.workDays.includes(d.getDay())){
+      const ds=d.toISOString().split('T')[0];
+      const ld=d.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+      opts.push({ds,ld,n:c+1}); c++;
+    }
+    d.setDate(d.getDate()+1);
+  }
+  BF._dates=opts;
+  addBot(`Próximas fechas disponibles:\n\n${opts.map(o=>`**${o.n}.** ${o.ld}`).join('\n')}\n\nResponde con el número`);
+}
+
+function handleDate(txt){
+  const n=parseInt(txt);
+  if(!BF._dates||isNaN(n)||n<1||n>BF._dates.length){ addBot(`Por favor elige un número del **1 al ${BF._dates?.length||5}** 🙏`); return }
+  BF.date=BF._dates[n-1].ds; BF.step='hora';
+  const taken=LA().filter(a=>a.date===BF.date).map(a=>a.time);
+  const slots=genSlots().filter(s=>!taken.includes(s));
+  if(!slots.length){ addBot('Lo siento, ese día no tiene horarios disponibles 😔\n\n¿Probamos con otra fecha?'); BF.step='fecha'; askDate(); return }
+  BF._slots=slots;
+  addBot(`Horarios disponibles para **${fmtD(BF.date).split(',')[0]}**:\n\n${slots.map((s,i)=>`**${i+1}.** ${s} hrs`).join('   ')}\n\nResponde con el número`);
+}
+
+function genSlots(){
+  const s=[]; let m=CFG.startH*60;
+  while(m+CFG.slotMin<=CFG.endH*60){
+    s.push(`${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`);
+    m+=CFG.slotMin+CFG.breakMin;
+  }
+  return s;
+}
+
+function handleTime(txt){
+  const n=parseInt(txt);
+  if(!BF._slots||isNaN(n)||n<1||n>BF._slots.length){ addBot(`Por favor elige un número del **1 al ${BF._slots?.length||1}**`); return }
+  BF.time=BF._slots[n-1]; BF.step='pago';
+  addBot(`**${BF.time} hrs** seleccionado ✅\n\n¿Cómo prefieres pagar?\n\n**1.** 🏦 Transferencia bancaria\n   Banco Estado · Cuenta RUT **8432861-8** · Titular: Nora María Oviedo\n\n**2.** 💵 Efectivo en consulta`);
+}
+
+function handlePago(txt){
+  const n=parseInt(txt);
+  if(n!==1&&n!==2){ addBot('Por favor responde **1** (Transferencia) o **2** (Efectivo) 🙏'); return }
+  BF.pago=n===1?'Transferencia bancaria':'Efectivo en consulta';
+  BF.step='confirmar';
+  addBot(`Perfecto, aquí está el resumen:\n\n📋 **${BF.service.name}**\n👤 ${BF.data.nombre}\n📅 ${fmtD(BF.date)}\n🕐 ${BF.time} hrs\n💰 ${fmt(BF.service.price)}\n💳 ${BF.pago}\n${BF.pago.includes('Trans')?`🏦 Banco Estado · Cuenta RUT 8432861-8\n   Titular: Nora María Oviedo`:''}\n\n¿Confirmas la reserva?\nResponde **SÍ** para confirmar o **NO** para cancelar`);
+}
+
+function handleConfirm(txt){
+  if(txt.toLowerCase().match(/^s[ií]$|^si\b|^yes|^confirmo|^confirm/)){
+    const appt={
+      id:Date.now(), service:BF.service, date:BF.date, time:BF.time,
+      patient:BF.data, payment:BF.pago, total:BF.service.price,
+      status:'confirmed', createdAt:new Date().toISOString()
+    };
+    const all=LA(); all.push(appt); SA(all);
+    BF.active=false;
+    addBot(`✅ **¡Sesión confirmada!**\n\n📅 ${fmtD(BF.date)} a las **${BF.time} hrs**\n\n${BF.pago.includes('Trans')?'💡 Recuerda realizar la transferencia antes de tu sesión.\n\n':''}Te esperamos, **${BF.data.nombre}** 💛\n\nSi necesitas cancelar o reagendar, comunícate con anticipación.`);
+    setTimeout(()=>showConfirm(appt),1500);
+  } else {
+    BF.active=false;
+    addBot('Reserva cancelada 😊 ¿Puedo ayudarte en algo más?');
+  }
+}
+
+function showConfirm(appt){
+  document.getElementById('conf-det').innerHTML=`
+    <div class="crow"><span>Paciente</span><span>${appt.patient.nombre}</span></div>
+    <div class="crow"><span>RUT</span><span>${appt.patient.rut}</span></div>
+    <div class="crow"><span>Servicio</span><span>${appt.service.name}</span></div>
+    <div class="crow"><span>Fecha</span><span>${fmtD(appt.date)}</span></div>
+    <div class="crow"><span>Hora</span><span>${appt.time} hrs</span></div>
+    <div class="crow"><span>Médico</span><span>${CFG.doctor}</span></div>
+    <div class="crow"><span>Forma de pago</span><span>${appt.payment}</span></div>
+    ${appt.payment.includes('Trans')?`<div class="crow"><span>Cuenta destino</span><span>Banco Estado · RUT 8432861-8</span></div>`:''}
+    <div class="crow"><span>Total</span><span>${fmt(appt.total)}</span></div>
+  `;
+  const msg=encodeURIComponent(
+    `✅ *Confirmación de Sesión*\n*${CFG.doctor}*\n\n👤 ${appt.patient.nombre}\n📅 ${fmtD(appt.date)}\n🕐 ${appt.time} hrs\n🧠 ${appt.service.name}\n💰 ${fmt(appt.total)}\n💳 ${appt.payment}\n${appt.payment.includes('Trans')?`\n🏦 *Transferir a:*\nBanco Estado\nCuenta RUT: 8432861-8\nTitular: Nora María Oviedo\nAsunto: ${appt.patient.rut}\n`:''}\n_Por favor llega puntual. Ante cualquier cambio comunícate con anticipación. 💛_`
+  );
+  document.getElementById('wbtn-pac').onclick=()=>window.open(`https://wa.me/${appt.patient.telefono.replace(/\D/g,'')}?text=${msg}`,'_blank');
+  sv('confirm');
+}
+
+// ═══════════════ ADMIN ═══════════════
+let wkOff=0;
+function initAdm(){
+  document.getElementById('adm-sub').textContent=new Date().toLocaleDateString('es-CL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  refreshAdm(); buildSchedDays(); setupWsp();
+}
+function refreshAdm(){ renderStats(); renderWk(); renderAppts('upcoming') }
+
+function renderStats(){
+  const all=LA(); const ts=new Date().toISOString().split('T')[0];
+  const t=all.filter(a=>a.date===ts);
+  const up=all.filter(a=>a.date>=ts);
+  const ing=all.reduce((s,a)=>s+a.total,0);
+  document.getElementById('adm-stats').innerHTML=`
+    <div class="sc"><div class="sn">${t.length}</div><div class="sl2">Hoy</div></div>
+    <div class="sc"><div class="sn">${up.length}</div><div class="sl2">Próximas</div></div>
+    <div class="sc"><div class="sn">${all.length}</div><div class="sl2">Total citas</div></div>
+    <div class="sc"><div class="sn" style="font-size:1rem">${fmt(ing)}</div><div class="sl2">Ingresos</div></div>
+  `;
+}
+
+function wkNav(d){ wkOff=d===0?0:wkOff+d; renderWk() }
+function renderWk(){
+  const today=new Date();
+  const mon=new Date(today); mon.setDate(today.getDate()-today.getDay()+1+wkOff*7);
+  const all=LA(); const slots=genSlots(); const ts=today.toISOString().split('T')[0];
+  const days=[];
+  for(let i=0;i<5;i++){ const d=new Date(mon); d.setDate(mon.getDate()+i); days.push({date:d.toISOString().split('T')[0],d}) }
+  document.getElementById('wk-lbl').textContent=`${days[0].d.toLocaleDateString('es-CL',{day:'numeric',month:'short'})} – ${days[4].d.toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'})}`;
+  let h='<div class="wgrid"><div class="wgh" style="background:var(--bg3)"></div>';
+  days.forEach(({date,d})=>{
+    const iT=date===ts;
+    h+=`<div class="wgh${iT?' tod':''}"><div class="dn">${d.toLocaleDateString('es-CL',{weekday:'short'})}</div><div class="dd">${d.getDate()}</div></div>`;
+  });
+  slots.forEach(sl=>{
+    h+=`<div class="wgt">${sl}</div>`;
+    days.forEach(({date})=>{
+      const a=all.find(x=>x.date===date&&x.time===sl);
+      if(a) h+=`<div class="wgc"><div class="slot-a" onclick="showDet(${a.id})"><div class="pn">${a.patient.nombre.split(' ')[0]}</div><div class="pt">${a.service?.name.split(' ').slice(0,2).join(' ')}</div></div></div>`;
+      else h+=`<div class="wgc avail"></div>`;
+    });
+  });
+  h+='</div>';
+  document.getElementById('wgrid').innerHTML=h;
+}
+
+function showDet(id){
+  const a=LA().find(x=>x.id===id); if(!a)return;
+  const opc=confirm(`📋 ${a.service?.name}\n👤 ${a.patient.nombre} (${a.patient.rut})\n📅 ${fmtD(a.date)} · ${a.time} hrs\n📱 ${a.patient.telefono}\n💰 ${fmt(a.total)} · ${a.payment}\n\n¿Enviar recordatorio por WhatsApp a este paciente?`);
+  if(opc) enviarRecordatorio(id);
+}
+
+function renderAppts(flt='upcoming'){
+  const all=LA(); const ts=new Date().toISOString().split('T')[0];
+  let lst=flt==='today'?all.filter(a=>a.date===ts):flt==='upcoming'?all.filter(a=>a.date>=ts):all;
+  lst.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));
+  document.getElementById('appts-list').innerHTML=lst.length?lst.map(a=>`
+    <div class="ar">
+      <div><div class="atime">${a.time}</div><div class="adate">${fmtDs(a.date)}</div></div>
+      <div class="ainf">
+        <div class="aname">${a.patient.nombre}</div>
+        <div class="adet">${a.service?.name} · ${fmt(a.total)} · ${a.payment}</div>
+        <div class="adet">📱 ${a.patient.telefono}  ✉️ ${a.patient.email}</div>
+      </div>
+      <span class="tag tok">Confirmada</span>
+      <button class="abtn" onclick="delAppt(${a.id})">✕</button>
+    </div>`).join('')
+    :'<div style="text-align:center;padding:40px;color:var(--muted)">No hay citas en este período</div>';
+}
+function filt(f){ renderAppts(f) }
+function delAppt(id){ if(!confirm('¿Cancelar esta cita?'))return; SA(LA().filter(a=>a.id!==id)); refreshAdm(); toast('Cita cancelada','tok2') }
+
+function enviarRecordatorio(id){
+  const a=LA().find(x=>x.id===id); if(!a)return;
+  const tel=(a.patient.telefono||'').replace(/\D/g,'');
+  if(!tel){ toast('El paciente no tiene teléfono registrado','terr'); return }
+  const esDemain = a.date===new Date(Date.now()+86400000).toISOString().split('T')[0];
+  const esHoy = a.date===new Date().toISOString().split('T')[0];
+  const cuando = esHoy ? 'hoy' : esDemain ? 'mañana' : `el ${fmtD(a.date)}`;
+  const msg=encodeURIComponent(
+    `Hola ${a.patient.nombre} 😊
+
+Le recordamos su sesión con *${CFG.doctor}* ${cuando} a las *${a.time} hrs*.
+
+📋 ${a.service?.name}
+💰 ${fmt(a.total)} — ${a.payment}
+${a.payment.includes('Trans')?`
+🏦 Si aún no ha transferido:
+Banco Estado · Cuenta RUT 8432861-8
+Titular: Nora María Oviedo
+Asunto: ${a.patient.rut}
+`:''}
+Por favor confirme su asistencia respondiendo este mensaje. 💛`
+  );
+  window.open(`https://wa.me/${tel}?text=${msg}`,'_blank');
+}
+
+function buildSchedDays(){
+  const nm=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  document.getElementById('sched-days').innerHTML=nm.map((n,i)=>`
+    <div class="dt${CFG.workDays.includes(i+1)?' on':''}" onclick="this.classList.toggle('on')">
+      <div class="dn2">${n}</div>
+      <div class="dh">${CFG.workDays.includes(i+1)?`${CFG.startH}:00 – ${CFG.endH}:00`:'No disponible'}</div>
+    </div>`).join('');
+}
+function saveHor(){
+  CFG.startH=parseInt(document.getElementById('c-start').value)||9;
+  CFG.endH=parseInt(document.getElementById('c-end').value)||18;
+  CFG.slotMin=parseInt(document.getElementById('c-slot').value)||50;
+  CFG.breakMin=parseInt(document.getElementById('c-break').value)||10;
+  toast('Horario actualizado ✅','tok2');
+}
+function savePerfil(){
+  const w=document.getElementById('prf-wsp').value.replace(/\D/g,'');
+  if(w) CFG.wsp=w;
+  toast('Perfil guardado ✅','tok2');
+}
+
+function setupWsp(){
+  const ts=new Date().toISOString().split('T')[0];
+  const tmr=new Date(); tmr.setDate(tmr.getDate()+1);
+  const tmrS=tmr.toISOString().split('T')[0];
+  const b1=document.getElementById('wsp-tmr');
+  const b2=document.getElementById('wsp-all');
+  const b3=document.getElementById('wsp-recordatorios');
+  if(b1) b1.onclick=()=>{ const m=buildWsp(LA().filter(a=>a.date===tmrS),`Agenda ${fmtDs(tmrS)}`); window.open(`https://wa.me/${CFG.wsp}?text=${m}`,'_blank') };
+  if(b2) b2.onclick=()=>{ const m=buildWsp(LA().filter(a=>a.date>=ts),'Próximas citas'); window.open(`https://wa.me/${CFG.wsp}?text=${m}`,'_blank') };
+  if(b3) b3.onclick=()=>enviarRecordatoriosMasivos(tmrS);
+}
+
+function enviarRecordatoriosMasivos(fecha){
+  const appts=LA().filter(a=>a.date===fecha);
+  if(!appts.length){ toast('No hay citas para mañana','terr'); return }
+  let i=0;
+  function siguiente(){
+    if(i>=appts.length){ toast(`✅ ${appts.length} recordatorio(s) enviados`,'tok2'); return }
+    const a=appts[i]; i++;
+    const tel=(a.patient.telefono||'').replace(/\D/g,'');
+    const msg=encodeURIComponent(
+      `Hola ${a.patient.nombre} 😊
+
+Le recordamos su sesión con *${CFG.doctor}* mañana a las *${a.time} hrs*.
+
+📋 ${a.service?.name}
+💰 ${fmt(a.total)} — ${a.payment}
+${a.payment.includes('Trans')?`
+🏦 Banco Estado · Cuenta RUT 8432861-8
+Titular: Nora María Oviedo
+Asunto: ${a.patient.rut}
+`:''}
+Cualquier duda no dude en escribirnos. 💛`
+    );
+    window.open(`https://wa.me/${tel}?text=${msg}`,'_blank');
+    setTimeout(siguiente, 2000);
+  }
+  siguiente();
+}
+function buildWsp(appts,titulo){
+  let m=`🩺 *${titulo.toUpperCase()}*\n${CFG.doctor}\n\n`;
+  if(!appts.length){ m+='📭 Sin citas registradas.\n' }
+  else{
+    appts.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time)).forEach((a,i)=>{
+      m+=`${i+1}. *${a.time} hrs* — ${fmtDs(a.date)}\n`;
+      m+=`   👤 ${a.patient.nombre}\n   📱 ${a.patient.telefono}\n   📋 ${a.service?.name} · ${fmt(a.total)} · ${a.payment}\n\n`;
+    });
+    m+=`*Total: ${fmt(appts.reduce((s,a)=>s+a.total,0))}*`;
+  }
+  return encodeURIComponent(m+'\n_MediAgenda IA_');
+}
+
+// ═══════════════ PACIENTES ═══════════════
+function getPacientes(){
+  const all=LA();
+  const pac={};
+  all.forEach(a=>{
+    const k=a.patient.rut||a.patient.nombre;
+    if(!pac[k]){
+      pac[k]={ ...a.patient, citas:[], totalSesiones:0, totalPagado:0 };
+    }
+    pac[k].citas.push(a);
+    pac[k].totalSesiones++;
+    pac[k].totalPagado+=a.total;
+  });
+  return Object.values(pac).sort((a,b)=>a.nombre.localeCompare(b.nombre));
+}
+
+function renderPacientes(lista=null){
+  const pacs = lista || getPacientes();
+  const el = document.getElementById('pac-list');
+  if(!pacs.length){
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted)">No hay pacientes registrados aún.<br>Los pacientes aparecen aquí cuando agendan con Valentina.</div>';
+    return;
+  }
+  el.innerHTML = pacs.map(p=>`
+    <div class="pac-card" onclick="verFicha('${(p.rut||p.nombre).replace(/'/g,"\'")}')">
+      <div class="pac-av">${p.nombre.charAt(0).toUpperCase()}</div>
+      <div class="pac-inf">
+        <div class="pac-name">${p.nombre} ${p.apellido||''}</div>
+        <div class="pac-det">📱 ${p.telefono||'-'}  ·  ✉️ ${p.email||'-'}  ·  RUT: ${p.rut||'-'}</div>
+      </div>
+      <div class="pac-badge">${p.totalSesiones} sesión${p.totalSesiones!==1?'es':''}</div>
+    </div>`).join('');
+}
+
+function buscarPac(q){
+  const all=getPacientes();
+  if(!q.trim()){ renderPacientes(all); return }
+  const ql=q.toLowerCase();
+  const res=all.filter(p=>
+    (p.nombre||'').toLowerCase().includes(ql)||
+    (p.apellido||'').toLowerCase().includes(ql)||
+    (p.rut||'').toLowerCase().includes(ql)||
+    (p.telefono||'').includes(ql)
+  );
+  renderPacientes(res);
+}
+
+function verFicha(rut){
+  const all=LA();
+  const citas=all.filter(a=>a.patient.rut===rut||a.patient.nombre===rut);
+  if(!citas.length)return;
+  const p=citas[0].patient;
+  document.getElementById('ficha-nombre').textContent=(p.nombre||'')+' '+(p.apellido||'');
+  const total=citas.reduce((s,c)=>s+c.total,0);
+  document.getElementById('ficha-content').innerHTML=`
+    <div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:14px">
+      <div class="ficha-row"><span>RUT</span><span>${p.rut||'-'}</span></div>
+      <div class="ficha-row"><span>Teléfono</span><span>${p.telefono||'-'}</span></div>
+      <div class="ficha-row"><span>Email</span><span>${p.email||'-'}</span></div>
+      <div class="ficha-row"><span>Total sesiones</span><span>${citas.length}</span></div>
+      <div class="ficha-row"><span>Total pagado</span><span style="color:var(--gold)">${fmt(total)}</span></div>
+    </div>
+    <div style="font-size:.85rem;color:var(--muted);margin-bottom:8px;font-weight:600">HISTORIAL DE SESIONES:</div>
+    ${citas.sort((a,b)=>b.date.localeCompare(a.date)).map(c=>`
+      <div class="hist-item">
+        <div class="hist-date">📅 ${fmtD(c.date)} · ${c.time} hrs</div>
+        <div class="hist-det">${c.service?.name} · ${fmt(c.total)} · ${c.payment}</div>
+        ${c.patient.motivo?`<div class="hist-det" style="margin-top:3px;color:var(--muted)">Motivo: ${c.patient.motivo}</div>`:''}
+      </div>`).join('')}
+  `;
+  const msg=encodeURIComponent(`Hola ${p.nombre} 😊 Le escribimos de la consulta de ${CFG.doctor}. ¿En qué le podemos ayudar?`);
+  document.getElementById('ficha-wsp').onclick=()=>window.open(`https://wa.me/${(p.telefono||'').replace(/\D/g,'')}?text=${msg}`,'_blank');
+  document.getElementById('ovl-ficha').classList.add('show');
+}
+
+// Nueva cita manual
+function openNuevoPac(){
+  // Fecha mínima = hoy
+  const hoy=new Date().toISOString().split('T')[0];
+  document.getElementById('np-fecha').min=hoy;
+  document.getElementById('np-fecha').value=hoy;
+  actualizarHorasDisp();
+  document.getElementById('np-nombre').value='';
+  document.getElementById('np-apellido').value='';
+  document.getElementById('np-rut').value='';
+  document.getElementById('np-tel').value='';
+  document.getElementById('np-email').value='';
+  document.getElementById('np-motivo').value='';
+  document.getElementById('ovl-nuevapac').classList.add('show');
+  setTimeout(()=>document.getElementById('np-nombre').focus(),100);
+}
+
+document.addEventListener('change',function(e){
+  if(e.target.id==='np-fecha') actualizarHorasDisp();
+});
+
+function actualizarHorasDisp(){
+  const fecha=document.getElementById('np-fecha')?.value;
+  if(!fecha)return;
+  const taken=LA().filter(a=>a.date===fecha).map(a=>a.time);
+  const slots=genSlots().filter(s=>!taken.includes(s));
+  const sel=document.getElementById('np-hora');
+  if(!sel)return;
+  sel.innerHTML=slots.length
+    ? slots.map(s=>`<option value="${s}">${s} hrs</option>`).join('')
+    : '<option value="">No hay horarios disponibles</option>';
+}
+
+function guardarNuevaCita(){
+  const nombre=document.getElementById('np-nombre').value.trim();
+  const apellido=document.getElementById('np-apellido').value.trim();
+  const rut=document.getElementById('np-rut').value.trim();
+  const tel=document.getElementById('np-tel').value.trim();
+  const email=document.getElementById('np-email').value.trim();
+  const motivo=document.getElementById('np-motivo').value.trim();
+  const svcIdx=parseInt(document.getElementById('np-servicio').value);
+  const pago=document.getElementById('np-pago').value;
+  const fecha=document.getElementById('np-fecha').value;
+  const hora=document.getElementById('np-hora').value;
+  if(!nombre||!rut||!tel||!fecha||!hora){
+    toast('Completa los campos obligatorios (*)','terr'); return;
+  }
+  if(!hora){ toast('No hay horarios disponibles en esa fecha','terr'); return }
+  const appt={
+    id:Date.now(),
+    service:CFG.services[svcIdx],
+    date:fecha, time:hora,
+    patient:{ nombre:nombre+' '+apellido, apellido, nombre:nombre, rut, telefono:tel, email, motivo },
+    payment:pago, total:CFG.services[svcIdx].price,
+    status:'confirmed', createdAt:new Date().toISOString(),
+    origen:'manual'
+  };
+  const all=LA(); all.push(appt); SA(all);
+  closeOvl('ovl-nuevapac');
+  refreshAdm(); renderPacientes();
+  toast(`✅ Cita de ${nombre} guardada para el ${fmtDs(fecha)} a las ${hora}`,'tok2');
+}
+
+</script>
+</body>
+</html>
